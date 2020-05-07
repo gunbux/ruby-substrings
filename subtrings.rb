@@ -2,7 +2,7 @@ def substrings(string,dictionary)
   #Check if string is of type String and dictionary is of typer Array
   return 'TypeError' if !string.is_a?(String) || !dictionary.is_a?(Array  )
   
-  result = Hash.new
+  result = Array.new
 
   #Change all the cases of the string to lowercase
   string = string.downcase
@@ -15,10 +15,7 @@ def substrings(string,dictionary)
       checker = string[i,g]
       #puts checker
       if dictionary.include?(checker)
-        if !result.include?(checker)
-          result[checker]=0
-        end
-        result[checker]+=1
+        result.push(checker)
         #puts "Result found, i is at #{i} and g is at #{g} and word is #{checker}"
       end
     end
@@ -29,14 +26,30 @@ def substrings(string,dictionary)
 end
 
 def subsentence(sentence,dictionary)
-  #Make everything lowercase
 
-  #Remove the punctuation
+  results = Hash.new
 
+  #Make everything lowercase -- not neccesary since it's already done in substrings methods
+  #Remove the punctuation -- Replace all punctuation with space
+  sentence = sentence.gsub(',',' ')
+  sentence = sentence.gsub('.',' ')
+  sentence = sentence.gsub('?',' ')
+  sentence = sentence.gsub('!',' ')
+  sentence = sentence.gsub('\'',' ')
   #Convert the sentence into a list of words
-
+  list_of_words = sentence.split
+  puts "List of words from sentence is #{list_of_words}"
   #Run it through the substring methods and combine the results
-  
+  list_of_words.each do |word|
+    word_result = substrings(word,dictionary)
+    word_result.each do |answer|
+      if !results.include?(answer)
+        results[answer] = 0
+      end
+      results[answer] += 1
+    end
+  end
+  return results
 end
 
 #Test case to check for TypeError
@@ -47,4 +60,7 @@ end
 #
 #Test case for accurate results
 dictionary = ["below","down","go","going","horn","how","howdy","it","i","low","own","part","partner","sit"]
-print substrings('below',dictionary)
+#print subsentence('below',dictionary)
+#print subsentence("Howdy partner, sit down! How's it going?",dictionary)
+#
+#All test cases complete
